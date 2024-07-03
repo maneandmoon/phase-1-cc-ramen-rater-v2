@@ -1,7 +1,3 @@
-document.addEventListener("DOMContentLoaded", (event) => {
-  console.log("DOM fully loaded and parsed");
-});
-
 const url = "http://localhost:3000";
 
 //The endpoints you may need are:
@@ -16,9 +12,17 @@ const detailRestaurant = document.getElementsByClassName("restaurant")[0];
 const detailRating = document.getElementById("rating-display");
 const detailComment = document.getElementById("comment-display");
 
+document.addEventListener("DOMContentLoaded", (event) => {
+//console.log("DOM fully loaded and parsed");
+});
+
+
 //addSubmitListener
 const newRamenForm = document.getElementById("new-ramen");
-newRamenForm.addEventListener('submit', addSubmitListener)
+newRamenForm.addEventListener('submit', addSubmitListener);
+
+const editForm = document.getElementById("edit-ramen");
+editForm.addEventListener('submit', updateForm);
 
 fetch(`${url}/ramens`)
     .then((res)=> {    
@@ -29,6 +33,7 @@ fetch(`${url}/ramens`)
    }
    })
     .then(mainRamen);
+
 
 function mainRamen(ramens){
       ramens.forEach(displayRamens)
@@ -76,12 +81,19 @@ function addSubmitListener(e){
   displayDetails(newRamen);
 };
 
+//advanced deliverables
+//image is async
+//undefined
 
-
-//** Attention here **: Your program should have a main() function that invokes `displayRamens` 
-//and `addSubmitListener` after the DOM has fully loaded and start the program logic.
-
-//document.addEventListener("DOMContentLoaded", ()=>{});
+function updateForm (e){
+  e.preventDefault();
+  const editForm = document.getElementById("edit-ramen");
+  const newUpdate = {
+    rating: e.target.rating.value,
+    comment: e.target["new-comment"].value,
+  };
+  displayDetails(newUpdate);
+}
 
 // Export functions for testing
 // export{
