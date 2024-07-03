@@ -1,29 +1,92 @@
-// index.js
+document.addEventListener("DOMContentLoaded", (event) => {
+  console.log("DOM fully loaded and parsed");
+});
 
-// Callbacks
-const handleClick = (ramen) => {
-  // Add code
+const url = "http://localhost:3000";
+
+//The endpoints you may need are:
+//- GET `/ramens`
+//- GET `/ramens/:id`
+
+const ramenMenuDiv = document.getElementById("ramen-menu");
+const ramenDetailDiv = document.getElementById("ramen-detail");
+const detailImage = document.getElementsByClassName("detail-image")[0];
+const detailName = document.getElementsByClassName("name")[0];
+const detailRestaurant = document.getElementsByClassName("restaurant")[0];
+const detailRating = document.getElementById("rating-display");
+const detailComment = document.getElementById("comment-display");
+
+//addSubmitListener
+const newRamenForm = document.getElementById("new-ramen");
+newRamenForm.addEventListener('submit', addSubmitListener)
+
+fetch(`${url}/ramens`)
+    .then((res)=> {    
+         if(res.ok){
+             return res.json();
+         }else{
+             throw "no";
+   }
+   })
+    .then(mainRamen);
+
+function mainRamen(ramens){
+      ramens.forEach(displayRamens)
 };
 
-const addSubmitListener = () => {
-  // Add code
-}
+function displayRamens(ramen){
+    const ramenMenuDiv = document.getElementById("ramen-menu");
+    const ramenImage = document.createElement("img");
+    ramenImage.src = ramen.image;
+    ramenMenuDiv.append(ramenImage); 
 
-const displayRamens = () => {
-  // Add code
+    //handleClick
+    ramenImage.addEventListener("click", e => displayDetails(ramen));   
 };
 
-const main = () => {
-  // Invoke displayRamens here
-  // Invoke addSubmitListener here
-}
+function displayDetails(ramen){
+    const ramenDetailDiv = document.getElementById("ramen-detail");
+    const detailImage = document.getElementsByClassName("detail-image")[0];
+    const detailName = document.getElementsByClassName("name")[0];
+    const detailRestaurant = document.getElementsByClassName("restaurant")[0];
+    const detailRating = document.getElementById("rating-display");
+    const detailComment = document.getElementById("comment-display");
 
-main()
+    detailImage.src = ramen.image;
+    detailImage.alt = ramen.name;
+    detailName.textContent = ramen.name;
+    detailRestaurant.textContent = ramen.restaurant;
+    detailRating.textContent = ramen.rating;
+    detailComment.textContent = ramen.comment;
+
+};
+
+//addSubmitListener
+function addSubmitListener(e){
+  e.preventDefault();
+    
+    const newRamenForm = document.getElementById("new-ramen");
+    const newRamen = {
+    name: e.target.name.value,
+    restaurant: e.target.restaurant.value,
+    image: e.target.image.value,
+    rating: e.target.rating.value,
+    comment: e.target["new-comment"].value,
+  };
+  displayDetails(newRamen);
+};
+
+
+
+//** Attention here **: Your program should have a main() function that invokes `displayRamens` 
+//and `addSubmitListener` after the DOM has fully loaded and start the program logic.
+
+//document.addEventListener("DOMContentLoaded", ()=>{});
 
 // Export functions for testing
-export {
-  displayRamens,
-  addSubmitListener,
-  handleClick,
-  main,
-};
+// export{
+//   displayRamens,
+//   addSubmitListener,
+//   handleClick,
+//   main,
+//}
